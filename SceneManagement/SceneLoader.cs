@@ -109,8 +109,6 @@ namespace Pooki.Core.SceneManagement
             }
         }
 
-
-
         IEnumerator LoadAdditiveSceneRoutine(string sceneID)
         {
             Debug.Log(GetType().Name + " Loading Scene " + sceneID, this);

@@ -1,116 +1,71 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
 
-namespace Pooki.Core.Events
+namespace Forbidden.EventHandling
 {
-    /// <summary>
-    /// Generic subject class for sending specified events.
-    /// Mainly to avoid having write attach/detach and send-event methods to multiple subjects. 
-    /// </summary>
-    /// <typeparam name="T">EventArgs type</typeparam>
-    public class EventSubject<T> where T : EventArgs
-    {
-        private readonly object _sender;
+	public class GenericEventHandler<T> where T : EventArgs
+	{
+		private readonly object _sender;
+		private readonly List<IEventListener<T>> _eventListeners = new List<IEventListener<T>>();
 
-        /// <summary>
-        /// Event to send when observer gets attached to EventSubject.
-        /// </summary>
-        private Func<T> _fetchAttachArgs;
+		public GenericEventHandler(object sender)
+		{
+			_sender = sender;
+		}
 
-        /// <summary>
-        /// EventHandler for sending events to attached observers, will be null has no listeners.
-        /// </summary>
-        private EventHandler<T> _handler;
+		public void Attach(IEventListener<T> newListener)
+		{
+			if (!_eventListeners.Contains(newListener))
+			{
+				_eventListeners.Add(newListener);
+			}
+			else
+			{
+				UnityEngine.Object context = newListener as UnityEngine.Object;
+				if (context != null)
+					Debug.LogError(LogTags.SYSTEM_ERROR + " listener already attached ", context);
+				else
+					Debug.LogError(LogTags.SYSTEM_ERROR + " listener already attached ");
+			}
+		}
 
-        public string debugID = "NOTSET";
-        
-        /// <summary>
-        /// Constructor for event subject.
-        /// </summary>
-        /// <param name="sender">Sender  </param>
-        /// <param name="fetchAttachArgs"></param>
-        public EventSubject(object sender, Func<T> fetchAttachArgs)
-        {
-            _sender = sender;
-            _fetchAttachArgs = fetchAttachArgs;
-        }
+		public void Detach(IEventListener<T> removeListener)
+		{
+			if (_eventListeners.Contains(removeListener))
+			{
+				_eventListeners.Remove(removeListener);
+			}
+			else
+			{
+				UnityEngine.Object context = removeListener as UnityEngine.Object;
+				if(context != null)
+					Debug.LogError(LogTags.SYSTEM_ERROR + " no such listener attached ", context);
+				else
+					Debug.LogError(LogTags.SYSTEM_ERROR + " no such listener attached ");
+			}
+		}
 
-        public EventSubject(object sender)
-        {
-            _sender = sender;
-            _fetchAttachArgs = null;
-        }
+		public void SendEvent(T args)
+		{
+			for (int i = _eventListeners.Count - 1; i >= 0; i--)
+			{
+				if (_eventListeners[i] == null)
+				{
+					UnityEngine.Object context = _eventListeners[i] as UnityEngine.Object;
+					if (context != null)
+						Debug.LogError(LogTags.SYSTEM_ERROR + " removed null event listener", context);
+					else
+						Debug.LogError(LogTags.SYSTEM_ERROR + " removed null event listener");
 
-        public void Attach(IEventReceiver<T> receiver)
-        {
-            if (receiver == null)
-            {
-                UnityEngine.Debug.Log("Given receiver is null ");
-                return;
-            }
+					_eventListeners.RemoveAt(i);
+					continue;
+				}
 
-            _handler -= receiver.HandleEvent; //prevents duplicates
-            _handler += receiver.HandleEvent;
+				_eventListeners[i].HandleEvent(_sender, args);
+			}
+		}
 
-            try
-            {
-                if(_fetchAttachArgs != null)
-                {
-                    T attachArgs = _fetchAttachArgs.Invoke();
-                    if (attachArgs != null)
-                    {
-                        receiver.HandleEvent(_sender, attachArgs);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                UnityEngine.Object context = receiver as UnityEngine.Object;
-                if (context != null)
-                    UnityEngine.Debug.LogError("HandleEvent method of " + receiver.GetType().Name + " caused an exception on Attach event \n" + e.Message, context);
-                else
-                    UnityEngine.Debug.LogError("HandleEvent method of " + receiver.GetType().Name + " caused an exception on Attach event \n" + e.Message);
-            }
-        }
-
-        public void Detach(IEventReceiver<T> receiver)
-        {
-            _handler -= receiver.HandleEvent;
-        }
-
-        public void SendEvent(T eventArgs)
-        {
-            //If no observers for events are attached, simply early out.
-            if (_handler == null)
-            {
-                return;
-            }
-
-            Delegate[] delegates = _handler.GetInvocationList();
-            for (int i = 0; i < delegates.Length; i++)
-            {
-                try
-                {
-                    delegates[i].DynamicInvoke(_sender, eventArgs);
-                }
-                catch (Exception e)
-                {
-                    if (delegates[i].Target != null)
-                    {
-                        string targetType = delegates[i].Target.GetType().Name;
-
-                        UnityEngine.Object context = delegates[i].Target as UnityEngine.Object;
-
-                        if (context != null)
-                            UnityEngine.Debug.LogError("Error in the " + context.name + " - " + targetType + " HandleEvent method. \n" + e, context);
-                        else
-                            UnityEngine.Debug.LogError("Error in the " + targetType + " HandleEvent method. \n" + e);
-                    }
-                    else
-                    {
-                        UnityEngine.Debug.LogError("Error in the handler " + _handler.Method.Name + "\n" + e);
-                    }
-                }
-            }
-        }
-    }
+	}
 }
