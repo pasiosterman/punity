@@ -1,4 +1,4 @@
-# PookiCore
+# PUnity
 Repository for common unity scripts that I use in my game projects. 
 
 1. [Event Handling](#Event-Handling)
@@ -14,7 +14,7 @@ Player MonoBehavior that sends OnDeathEventArgs when hit by any collider.
 
 ```csharp
 using UnityEngine;
-using Pooki.EventHandling;
+using PUnity.EventHandling;
 
 public class Player : MonoBehaviour, IEventSubject<PlayerEventArgs>
 {
@@ -65,7 +65,7 @@ public class OnDeathEventArgs : PlayerEventArgs
 GameManager that find player on enable and attaches itself to listen to any PlayerEventArgs it might send. 
 ```csharp
 using UnityEngine;
-using Pooki.EventHandling;
+using PUnity.EventHandling;
 
 
 public class GameManager : MonoBehaviour, IEventListener<PlayerEventArgs>
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour, IEventListener<PlayerEventArgs>
 Reflection based JSON serializer for POCO's using SimpleJSON. For projects that can't use Json.NET for some reason. 
 
 ```csharp
-using Pooki.Serialization;
+using PUnity.Serialization;
 
 public class Example
 {
