@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace Pooki.Core
 {
@@ -71,6 +72,35 @@ namespace Pooki.Core
                 return Instance.Tools[key];
 
             else { return null; }
+        }
+
+        private static GameObject _persistentGameObject;
+        public static GameObject PersistentGameObject
+        {
+            get
+            {
+                if (_persistentGameObject == null)
+                {
+                    _persistentGameObject = new GameObject("PersistentGameObject");
+                    SceneManager.MoveGameObjectToScene(_persistentGameObject, PersistentScene);
+                }
+                return _persistentGameObject;
+            }
+        }
+
+        private static Scene _persistentScene;
+        public static Scene PersistentScene
+        {
+            get
+            {
+                if (_persistentScene == null)
+                {
+                    _persistentScene = SceneManager.GetSceneByName("PERSISTENT_SCENE");
+                    if (!_persistentScene.isLoaded)
+                        _persistentScene = SceneManager.CreateScene("PERSISTENT_SCENE");
+                }
+                return _persistentScene;
+            }
         }
     }
 }
