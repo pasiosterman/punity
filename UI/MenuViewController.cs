@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Pooki.Core.UI
+namespace PUnity.Core.UI
 {
     public class MenuViewController : MonoBehaviour
     {

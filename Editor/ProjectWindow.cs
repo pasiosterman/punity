@@ -4,7 +4,7 @@ using UnityEditor;
 using System.Reflection;
 using System.Linq;
 
-namespace Pooki.Editor
+namespace PUnity.Editor
 {
     public class HierarchyHelperWindow : EditorWindow
     {

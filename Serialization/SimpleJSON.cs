@@ -41,7 +41,7 @@ using System.Linq;
 using System.Text;
 
 //namespace SimpleJSON
-namespace Pooki.Serialization //Mainly to avoid clash with older versions.
+namespace PUnity.Serialization //Mainly to avoid clash with older versions.
 {
     public enum JSONNodeType
     {

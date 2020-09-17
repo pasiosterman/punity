@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace Pooki.Core
+namespace PUnity.Core
 {
     public class SceneLoader2
     {

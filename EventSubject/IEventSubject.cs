@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pooki.EventHandling
+namespace PUnity.EventHandling
 {
     public interface IEventSubject<T> where T : EventArgs
     {

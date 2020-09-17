@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pooki.EventHandling
+namespace PUnity.EventHandling
 {
     public interface IEventListener<T> where T : EventArgs
     {

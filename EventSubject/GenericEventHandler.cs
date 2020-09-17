@@ -2,7 +2,7 @@
 using UnityEngine;
 using System;
 
-namespace Pooki.EventHandling
+namespace PUnity.EventHandling
 {
 	public class GenericEventHandler<T> where T : EventArgs
 	{

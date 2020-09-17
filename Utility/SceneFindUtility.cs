@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Pooki.Core
+namespace PUnity.Core
 {
     public static class SceneFindUtility
     {

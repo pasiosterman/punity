@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Pooki.Core.UI
+namespace PUnity.Core.UI
 {
     public class BaseMenuView : MonoBehaviour
     {

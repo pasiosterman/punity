@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System;
 
-namespace Pooki.Serialization
+namespace PUnity.Serialization
 {
     public static class ObjectSerializer
     {

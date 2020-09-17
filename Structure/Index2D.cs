@@ -1,5 +1,5 @@
 ﻿
-namespace Pooki
+namespace PUnity
 {
     [System.Serializable]
     public struct Index2D
