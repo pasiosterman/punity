@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Forbidden.EventHandling
+namespace Pooki.EventHandling
 {
     public interface IEventListener<T> where T : EventArgs
     {
