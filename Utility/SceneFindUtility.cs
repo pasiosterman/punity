@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace PUnity.Core
+namespace PUnity
 {
     public static class SceneFindUtility
     {

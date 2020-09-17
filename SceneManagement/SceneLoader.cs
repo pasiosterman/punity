@@ -8,7 +8,7 @@ namespace PUnity
 {
     public class SceneLoader : MonoBehaviour
     {
-        private readonly HashSet<string> _systemScenes = new HashSet<string>();
+        private readonly HashSet<string> _systemScenes = new HashSet<string>(new string[]{"PERSISTENT_SCENE"});
         private HashSet<string> SystemScenes { get { return _systemScenes; } }
         private List<IEnumerator> _routines = new List<IEnumerator>();
 

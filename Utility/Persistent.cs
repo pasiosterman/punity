@@ -27,9 +27,9 @@ namespace PUnity
                 if (_componentParent == null)
                 {
                     _componentParent = new GameObject("ComponentParent");
-                    MoveToPersistentScene(_persistentGameObject);
+                    MoveToPersistentScene(_componentParent);
                 }
-                return _persistentGameObject;
+                return _componentParent;
             }
         }
 
@@ -38,9 +38,10 @@ namespace PUnity
         {
             get
             {
-                if (_persistentScene == null)
+                if (!_persistentScene.isLoaded)
                 {
                     _persistentScene = SceneManager.GetSceneByName("PERSISTENT_SCENE");
+
                     if (!_persistentScene.isLoaded)
                         _persistentScene = SceneManager.CreateScene("PERSISTENT_SCENE");
                 }
@@ -50,26 +51,53 @@ namespace PUnity
 
         public static void MoveToPersistentScene(GameObject obj)
         {
-            SceneManager.MoveGameObjectToScene(obj, PersistentScene);
+            if (obj != null)
+                SceneManager.MoveGameObjectToScene(obj, PersistentScene);
+            else
+                Debug.LogError("Unable to move null object to persistent scene");
+        }
+
+        public static T[] FindObjectsOfType<T>() where T : Component
+        {
+            int index = -1;
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if(scene == PersistentScene)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index >= 0)
+                return SceneFindUtility.FindAllComponentsOfType<T>(index);
+            else
+                return new T[0];
+        }
+
+        public static GameObject[] GetRootObjects()
+        {
+            return PersistentScene.GetRootGameObjects();
         }
 
         public static T CreateComponent<T>() where T : Component
         {
-            GameObject go = new GameObject(typeof(T).Name);
+            string typeName = typeof(T).Name;
+            GameObject go = new GameObject(typeName);
             T comp = go.AddComponent<T>();
             go.transform.SetParent(ComponentParent.transform);
-
             return comp;
         }
 
         public static T GetComponent<T>() where T : Component
         {
-            return PersistentGameObject.GetComponentInChildren<T>();
+            return ComponentParent.GetComponentInChildren<T>();
         }
 
         public static T[] GetComponents<T>() where T : Component
         {
-            return PersistentGameObject.GetComponentsInChildren<T>();
+            return ComponentParent.GetComponentsInChildren<T>();
         }
     }
 }

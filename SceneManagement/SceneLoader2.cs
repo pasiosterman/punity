@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace PUnity.Core
+namespace PUnity
 {
     public class SceneLoader2
     {
